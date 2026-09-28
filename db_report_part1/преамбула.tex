@@ -1,0 +1,48 @@
+\documentclass[a4paper]{extarticle}
+%\documentclass[12pt, a4paper]{article}
+% Кодировки и язык
+\usepackage[T2A]{fontenc}          % Кириллическая кодировка шрифтов
+\usepackage[utf8]{inputenc}        % Кодировка исходного файла — UTF-8
+\usepackage[russian]{babel}        % Поддержка русского языка
+
+% Основные пакеты
+\usepackage{graphicx}              % Работа с изображениями
+\usepackage{amsmath}               % Математические формулы
+\usepackage{caption}
+\usepackage{indentfirst}           % Отступ в первом абзаце раздела
+\usepackage{fancyvrb}              % Расширенный режим Verbatim
+\usepackage{fvextra}               % Поддержка breaklines и UTF-8 в Verbatim
+\usepackage{comment}               % Блоки комментариев
+\usepackage{subfiles}              % Модульная сборка документа
+\usepackage{enumitem}              % Гибкая настройка списков
+\usepackage[skip=0pt]{parskip}     % Убирает лишние отступы между абзацами
+\usepackage{float}
+\usepackage{makecell}
+\usepackage{hyperref}
+% Гиперссылки — всегда подключать ПОСЛЕДНИМ из основных пакетов
+
+\usepackage{geometry}
+\usepackage{afterpage}
+\usepackage{scrlayer-scrpage}
+\usepackage{pdflscape}
+\usepackage{pdfpages}
+
+% === Настройка листингов (без плавающих объектов) ===
+% Используем ручной счётчик — это надёжно для длинных кодов с русским текстом
+\newcounter{listing}
+\renewcommand{\thelisting}{\arabic{listing}}
+\newcommand{\listingcaption}[1]{%
+  \par\refstepcounter{listing}%
+  \noindent\textbf{Листинг~\thelisting.} #1\par\nobreak\vspace{0.4em}%
+}
+
+% === Путь к изображениям ===
+\graphicspath{{./images/}}
+
+% === Геометрия страницы ===
+\textheight=24cm    % Высота текстового блока
+\textwidth=16cm     % Ширина текстового блока
+\oddsidemargin=0pt  % Отступ от левого края (для односторонней печати)
+\topmargin=-1.5cm   % Верхний отступ
+\parindent=24pt     % Абзацный отступ
+\flushbottom        % Выравнивание текста по нижнему краю страницы

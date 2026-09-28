@@ -1,0 +1,34 @@
+
+\subsection{Лингвистическое описание схемы на русском языке}
+\begin{enumerate}
+    \item Зоотехник (id\_Зоотехник (INT), Фамилия (VARCHAR(80)), Имя (VARCHAR(70)), Отчество (VARCHAR(80)), Стаж\_работы (DECIMAL(4,1)), Телефон (VARCHAR(20)), Почта (VARCHAR(255))).
+    \item Порода (id\_Порода (INT), Название (VARCHAR(100))).
+    \item Корова (id\_Корова (INT), Вес (INT), Возраст (INT), id\_Порода (INT)).
+    \item Лактация (id\_Лактация (INT), Номер (INT), Начало (DATE), Окончание (DATE), id\_Корова (INT), id\_Фаза (INT)).
+    \item Фаза\_лактации (id\_Фаза (INT), Название (VARCHAR(50))).
+    \item Суточность (id\_Суточность (INT), Время\_суток (VARCHAR(60))).
+    \item Сезонность (id\_Сезонность (INT), Сезон (VARCHAR(60))).
+    \item Рацион (id\_Рацион (INT), id\_Сезонность (INT), id\_Фаза (INT), id\_Зоотехник (INT)).
+    \item Вид\_корма (id\_Вид\_корма (INT), Название (VARCHAR(30))).
+    \item Корма (id\_Корм (INT), Название (VARCHAR(100)), Физические\_характеристики (TEXT), Химические\_свойства (TEXT), id\_Вид (INT)).
+    \item План\_кормления (id\_План\_кормления (INT), Количество\_корма (DECIMAL(6,3)), id\_Корм (INT), id\_Рацион (INT)).
+    \item Питание (id\_Питание (INT), id\_Корова (INT), id\_План\_кормления (INT), id\_Суточночть (INT)).
+\end{enumerate}
+
+\subsection{Лингвистическое описание схемы на английском языке}
+
+\begin{enumerate}
+    \item Livestock\_specialist (id\_Livestock\_specialist (INT), Surname (VARCHAR(80)), First\_name (VARCHAR(70)), Patronymic (VARCHAR(80)), Service\_length (DECIMAL(4,1)), Phone\_number (VARCHAR(20)), Email (VARCHAR(255))).
+Breed     \item Breed (id\_Breed (INT), Name (VARCHAR(100))).
+    \item Cow (id\_Cow (INT), Weight (INT), Age (INT), id\_Breed (INT)).
+    \item Lactation (id\_Lactation (INT), Number (INT), Start (DATE), End (DATE), id\_Cow (INT), id\_Lactation\_phase (INT)).
+    \item Lactation\_phase (id\_Lactation\_phase (INT), Name (VARCHAR(50))).
+    \item Day\_times (id\_Day\_times (INT), Day\_time (VARCHAR(60))).
+    \item Season (id\_Season (INT), Time\_of\_year (VARCHAR(60))).
+    \item Diet (id\_Diet (INT), id\_Season (INT), id\_Lactation\_phase (INT), id\_Livestock\_specialist (INT)).
+    \item Feed\_type (id\_Feed\_type (INT), Name (VARCHAR(30))).
+    \item Feeds (id\_Feeds (INT), Name (VARCHAR(100)), Physical\_characteristics (TEXT), Chemical\_properties (TEXT), id\_Feed\_type (INT)).
+    \item Feeding\_plan (id\_Feeding\_plan (INT), Feed\_amount (DECIMAL(6,3)), id\_Feeds (INT), id\_Diet (INT), id\_Day\_times (INT)).
+    \item Nutrition (id\_Nutrition (INT), id\_Cow (INT), id\_Feeding\_plan (INT)).
+\end{enumerate}
+

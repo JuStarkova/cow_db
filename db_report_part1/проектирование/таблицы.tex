@@ -1,0 +1,297 @@
+\subsection{Составление таблиц базы данных}
+
+\begin{table}[H]
+\centering
+\caption{Порода (Breed)}
+\label{tab:Порода}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Порода (Breed)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Breed & id\_Порода & INT & NOT NULL & - \\
+\hline
+2 & - & Name & Название & VARCHAR(100) & NULL & - \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+В таблице  \ref{tab:Порода} установлено ограничение 100 символов на длину атрибута <<Название>>, так как максимальная длина названия породы в каталоге \cite{poroda} --- 43 симавола с пробелами на русском языке без уточнений, таких как <<крупного рогатого скота>> или напраления породы: мясная, молочная, мясо-молочная. Так, заданное ограничение позволяет вместить названия пород с уточнениями при необходимости, вместить названия в переводе на английский язык, которые могут занимать больше символов.
+
+\begin{table}[H]
+\centering
+\caption{Суточность (Day\_times)}
+\label{tab:Суточность}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Суточность (Day\_Times)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Day\_times& id\_Суточность & INT & NOT NULL & - \\
+\hline
+2 & - & Day\_time & Время\_суток & VARCHAR(60) & NULL & - \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+В таблице \ref{tab:Суточность} установлено ограничение 60 символов на длину атрибута <<Время\_суток>>, так как слова утро, день, вечер имеют длину до 5 символов, а с добавлением слов поздний, ранний до 12 символов. Ограничение 60 символов позволяет хранить несколько значений времени суток, например: <<Поздний вечер, раннее утро>> --- 26.
+
+\begin{table}[H]
+\centering
+\caption{Сезонность (Season)}
+\label{tab:Сезонность}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Сезонность (Season)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Season & id\_Сезонность & INT & NOT NULL & - \\
+\hline
+2 & - & Time\_of\_year & Сезон & VARCHAR(60) & NULL & - \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+В таблице \ref{tab:Сезонность} установлено ограничение 60 символов на длину атрибута <<Сезон>> по аналогии с атрибутом <<Время\_суток>> в таблице \ref{tab:Суточность}.
+
+\begin{table}[H]
+\centering
+\caption{Фаза\_лактации (Lactation\_phase)}
+\label{tab:Фаза}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Фаза\_лактации (Lactation\_phase)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Lactation\_phase & id\_Фаза\_лактации & INT & NOT NULL & - \\
+\hline
+2 & - & Name & Название & VARCHAR(50) & NULL & - \\
+\hline
+\end{tabular}%
+}
+\end{table}
+В таблице \ref{tab:Фаза} установлено ограничение 50 символов на длину атрибута <<Название>>, так как примеры названий фаз: <<Новотельный период>>, <<Середина лактации>>, <<Заключительная фаза>>, <<Сухостойный период>> --- требуют по отдельности до 19 символов. Ограничение 50 символов позволяет хранить в одном поле несколько значений фаз, а также хранить уточнения поздний или ранний сухостой.
+
+\begin{table}[H]
+\centering
+\caption{Вид\_корма (Feed\_type)}
+\label{tab:Вид}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Вид\_корма (Feed\_type)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Feed\_type & id\_Вид & INT & NOT NULL & - \\
+\hline
+2 & - & Name & Название & VARCHAR(30) & NULL & - \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+В таблице \ref{tab:Вид} установлено ограничение 30 символов на длину атрибута <<Название>>, так как названия кормов: солома, сено, сенаж, зерносенаж, овощи, силос, корнеплоды, зерновые смеси, жмыхи, шроты, премиксы, концентрированные корма --- требуют до 24 символов.
+
+\begin{table}[H]
+\centering
+\caption{Зоотехник (Livestock\_specialist)}
+\label{tab:Зоотехник}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Зоотехник (Livestock\_specialist)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Livestock\_specialist & id\_Зоотехник & INT & NOT NULL & - \\
+\hline
+2 & - & Surname & Фамилия & VARCHAR(80) & NULL & - \\
+\hline
+3 & - & First\_name & Имя & VARCHAR(70) & NULL & - \\
+\hline
+4 & - & Patronymic & Отчество & VARCHAR(80) & NULL & - \\
+\hline
+5 & - & Service\_length & Стаж работы & DECIMAL(4,1) & NULL & - \\
+\hline
+6 & - & Phone\_number & Телефон & VARCHAR(20) & NULL & - \\
+\hline
+7 & - & Email & Почта & VARCHAR(255) & NULL & - \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+В проектируемой базе данных считается, что фамилия, имя и отчество принадлежат гражданам РФ. В России нет законодательных ограничений на длину имени, фамилии и отчества. 
+
+Ограничение длины атрибута «Фамилия» в таблице \ref{tab:Зоотехник} установлено в 80 символов. По данным открытых источников, самой длинной однословной фамилией в России является Семипополовигероверсалофедираковский (36 символов). Учитывая разрешенное законом использование двойных фамилий, выбранное ограничение позволяет вместить данную фамилию дважды с учетом дефиса и пробелов. 
+
+Ограничение длины атрибута «Имя» установлено в 70 символов, так как на основании анализа открытых источников \cite{sciencemail2025}, \cite{genoru2013} именем максимальной зафиксированной длины оказалось: Нарнорос Яэрэ а'Моритарнан Ломион Хорвэграуг Морион (51 символ). 
+
+Ограничение длины атрибута «Отчество» установлено в 80 символов, поскольку отчество образуется от имени отца путем добавления суффиксов и окончаний (-вна, -вич и др.), что при максимально допустимой длине имени в 70 символов гарантирует полное размещение данных.
+
+Ограничение длины атрибута <<Номер\_телефона>> установлено 20 символов, так как максимальная длина телефонного номера в России внутри страны составляет 10 цифр, для негеографических DEF-номеров мобильных абонентов длина номера --- 11 знаков; самые длинные номера телефонов в Южной Корее --- 17 символов.  
+
+Ограничение на длину атрибута «Почта» установлено в 255 символов. Данное значение основано на спецификации RFC 5321 («Simple Mail Transfer Protocol»), согласно которой максимально допустимая длина почтового адреса составляет 254 символа.
+
+Атрибут <<Стаж работы>> может содержать дробные числа с одной цифрой после запятой (до значения 999.9). Максимальный размер целой части превосходит продолжительность жизни человека. Одна цифра в дробной части позволяет фиксировать стаж с точностью до десятых долей года. 
+
+\begin{table}[H]
+\centering
+\caption{Рацион (Diet)}
+\label{tab:Рацион}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Рацион (Diet)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Diet & id\_Рацион & INT & NOT NULL & - \\
+\hline
+2 & FK & id\_Season & id\_Сезонность & INT & NOT NULL & \makecell{Season \\ (id\_Season)} \\
+\hline
+3 & FK & id\_Lactation\_phase & id\_Фаза\_лактации & INT & NOT NULL & \makecell{Lactation\_phase \\ (id\_Lactation\_phase)} \\
+\hline
+4 & FK & id\_Livestock\_specialist & id\_Зоотехник & INT & NOT NULL & \makecell{Livestock\_specialist \\ (id\_Livestock\_specialist)} \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Корова (Cow)}
+\label{tab:Корова}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Корова (Cow)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Cow & id\_Корова & INT & NOT NULL & - \\
+\hline
+2 & - & Weight & Вес & INT & NULL & - \\
+\hline
+3 & - & Age & Возраст & INT & NULL & - \\
+\hline
+4 & FK & id\_Breed & id\_Порода & INT & NOT NULL & Breed(id\_Breed) \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Корма (Feeds)}
+\label{tab:Корма}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Корма (Feeds)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Feeds & id\_Корм & INT & NOT NULL & - \\
+\hline
+2 & - & Name & Название & VARCHAR(100) & NULL & - \\
+\hline
+3 & - & Physical\_characteristics & Физические\_характеристики & TEXT & NULL & - \\
+\hline
+4 & - & Сhemical\_properties & Химические\_свойства & TEXT & NULL & - \\
+\hline
+5 & FK & id\_Feed\_type & id\_Вид & INT & NOT NULL & Feed\_type(id\_Feed\_type) \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+В таблице \ref{tab:Корма} установлено ограничение 100 символов на длину атрибута <<Название>>, так как оно позволит добавлять уточнения к значения <<Название>> из таблицы \ref{tab:Вид}, например, культуры (из чего изготовлен), фазы вегетации, способа заготовки, качественных характеристик.
+
+\begin{table}[H]
+\centering
+\caption{Лактация (Lactation)}
+\label{tab:Лактация}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Лактация (Lactation)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Lactation & id\_Лактация & INT & NOT NULL & - \\
+\hline
+2 & - & Number & Номер & INT & NULL & - \\
+\hline
+3 & - & Start & Начало & DATE & NULL & - \\
+\hline
+4 & - & End & Окончание & DATE & NULL & - \\
+\hline
+5 & FK & id\_Cow& id\_Корова & INT & NOT NULL & Cow(id\_Cow) \\
+\hline
+6 & FK & id\_Lactation\_Phase & id\_Фаза & INT & NOT NULL & Lactation\_Phase(id\_Lactation\_Phase) \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Питание}
+\label{tab:Питание}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{Питание (Nutrition)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Nutrition & id\_Питание & INT & NOT NULL & - \\
+\hline
+2 & FK & id\_Cow & id\_Корова & INT & NOT NULL & Cow(id\_Cow) \\
+\hline
+3 & FK & id\_Feeding\_plan & id\_План\_кормления & INT & NOT NULL & Feeding\_plan(id\_Feeding\_plan) \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{План кормления (Feeding\_plan)}
+\label{tab:Включение}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{7}{|c|}{План кормления (Feeding\_plan)} \\
+\hline
+№ & Тип ключа & Название EN & Название RU & Тип атрибута & Значение по умолчанию & Ссылка \\
+\hline
+1 & PK & id\_Feeding\_plan & id\_План\_кормления & INT & NOT NULL & - \\
+\hline
+2 & - & Feed\_amount & Количество\_корма & DECIMAL(6,3) & NULL & - \\
+\hline
+3 & FK & id\_Feeds & id\_Корм & INT & NOT NULL & Feeds(id\_Feeds) \\
+\hline
+4 & FK & id\_Diet & id\_Рацион & INT & NOT NULL & Diet(id\_Diet) \\
+\hline
+5 & FK & id\_Day\_times& id\_Суточность & INT & NOT NULL & Day\_Times(id\_Day\_Times) \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+В таблице \ref{tab:Включение} установлено ограничение длины атрибута <<Количество\_корма>> (6,3) по аналогии с таблицей \ref{tab:Питание}.
+
