@@ -1,0 +1,308 @@
+
+import random
+from faker import Faker
+import psycopg2
+from datetime import datetime, date, timedelta, time as datetime_time
+
+fake = Faker('ru_RU')
+
+conn = psycopg2.connect(
+    host="localhost",
+    user="julia7",
+    password="St080806sql",
+    database="cows_db"
+)
+cursor = conn.cursor()
+
+total_records = {
+    'Breed': 0,
+    'Day_Times': 0,
+    'Season': 0,
+    'Lactation_Phase': 0,
+    'Feed_Type': 0,
+    'Livestock_specialist': 0,
+    'Cow': 0,
+    'Feeds': 0,
+    'Diet': 0,
+    'Feeding_plan': 0,
+    'Nutrition': 0,
+    'Lactation': 0
+}
+
+
+## ВТОРОЙ УРОВЕНЬ: КОРОВА, КОРМ, РАЦИОН, ЛАКТАЦИЯ
+def create_cows(count=6574):
+    # Получаем список всех ID пород из таблицы Breed
+    cursor.execute("SELECT id_Breed FROM Breed")
+    breed_ids = [row[0] for row in cursor.fetchall()]
+    
+    if not breed_ids:
+        print("Нет пород в таблице Breed! Сначала заполните Breed.")
+        return
+    
+    num_breeds = len(breed_ids)  # будет 10
+    cows_per_breed = count // num_breeds  
+    remainder = count % num_breeds  
+    
+    for idx, breed_id in enumerate(breed_ids):
+        current_count = cows_per_breed + (1 if idx < remainder else 0)
+        
+        for _ in range(current_count):
+            weight = random.randint(350, 850)
+            age = random.randint(1, 15)
+            
+            cursor.execute(
+                "INSERT INTO Cow (Weight, Age, id_Breed) VALUES (%s, %s, %s)",
+                (weight, age, breed_id)
+            )
+            total_records['Cow'] += 1
+    
+    conn.commit()
+    print(f"Добавлено {total_records['Cow']} коров")
+
+def create_feeds(count=40):
+    # Получаем все id типов кормов
+    cursor.execute("SELECT id_Feed_type FROM Feed_Type")
+    feed_type_ids = [row[0] for row in cursor.fetchall()]
+
+    if not feed_type_ids:
+        print("Нет данных в Feed_Type! Сначала заполните словарь.")
+        return
+
+    feed_names = [
+        "Сено люцерны", "Сено луговое", "Сенаж клеверный", "Силос кукурузный",
+        "Солома пшеничная", "Солома ячменная", "Свекла кормовая",
+        "Морковь кормовая", "Зерно кукурузы", "Зерно ячменя",
+        "Комбикорм ПК-60", "Отруби пшеничные", "Жмых подсолнечный",
+        "Шрот соевый", "Патока свекловичная", "Премикс витаминный",
+        "Соль поваренная", "Мел кормовой", "Мясокостная мука",
+        "Зеленая трава", "ОАК концентрат"
+    ]
+
+    physical_chars = [
+        "Сыпучий, сухой", "Влажный, плотный", "Грубая структура",
+        "Мелкодисперсный", "Волокнистый", "Гранулированный"
+    ]
+
+    chemical_props = [
+        "Высокое содержание белка",
+        "Богат углеводами",
+        "Повышенное содержание клетчатки",
+        "Минерально-витаминный состав",
+        "Высокая энергетическая ценность",
+        "Низкое содержание жира"
+    ]
+
+    for _ in range(count):
+        name = random.choice(feed_names) + f" {random.randint(1,100)}"
+
+        cursor.execute(
+            """
+            INSERT INTO Feeds (Name, Physical_characteristics, Chemical_properties, id_Feed_type)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (
+                name,
+                random.choice(physical_chars),
+                random.choice(chemical_props),
+                random.choice(feed_type_ids)
+            )
+        )
+
+        total_records['Feeds'] += 1
+
+    conn.commit()
+    print(f"Добавлено {total_records['Feeds']} кормов")
+
+def create_diets():
+    # Получаем id зоотехников
+    cursor.execute("SELECT id_Livestock_specialist FROM Livestock_specialist")
+    specialist_ids = [row[0] for row in cursor.fetchall()] # получение списка зоотехников
+
+    if not specialist_ids:
+        print("Нет зоотехников!")
+        return
+
+    # Получаем id сезонов
+    cursor.execute("SELECT id_Season FROM Season")
+    season_ids = [row[0] for row in cursor.fetchall()] # получение списка сезонов
+
+    # Получаем id фаз лактации
+    cursor.execute("SELECT id_Lactation_phase FROM Lactation_Phase")
+    phase_ids = [row[0] for row in cursor.fetchall()] # получение списка фаз
+
+    if not season_ids or not phase_ids:
+        print("Не заполнены словари Season или Lactation_Phase!")
+        return
+
+    for specialist_id in specialist_ids:
+        diets_count = random.randint(1, 10)  # от 1 до 10 рационов для одного специалиста
+
+        for _ in range(diets_count):
+            cursor.execute(
+                """
+                INSERT INTO Diet (id_Season, id_Lactation_phase, id_Livestock_specialist)
+                VALUES (%s, %s, %s)
+                """,
+                (
+                    random.choice(season_ids),
+                    random.choice(phase_ids),
+                    specialist_id
+                )
+            )
+
+            total_records['Diet'] += 1
+
+    conn.commit()
+    print(f"Добавлено {total_records['Diet']} рационов")
+
+## ТРЕТИЙ УРОВЕНЬ: ПЛАН КОРМЛЕНИЯ
+def create_lactations():
+    # Получаем коров
+    cursor.execute("SELECT id_Cow FROM Cow")
+    cow_ids = [row[0] for row in cursor.fetchall()]
+
+    if not cow_ids:
+        print("Нет коров!")
+        return
+
+    # Получаем фазы лактации (важно: порядок!)
+    cursor.execute("""
+        SELECT id_Lactation_phase 
+        FROM Lactation_Phase
+        ORDER BY id_Lactation_phase
+    """)
+    phase_ids = [row[0] for row in cursor.fetchall()]
+
+    if len(phase_ids) != 5:
+        print("Ожидается 5 фаз лактации!")
+        return
+
+    for cow_id in cow_ids:
+        lactation_count = random.randint(1, 7)
+
+        # начальная дата (в прошлом)
+        current_date = fake.date_between(start_date='-5y', end_date='-1y')
+
+        for lact_num in range(1, lactation_count + 1):
+
+            # длительности фаз (в днях, примерно реалистично)
+            phase_durations = [
+                random.randint(10, 30),   # новотельный период
+                random.randint(80, 150),  # середина
+                random.randint(30, 60),   # заключительная
+                random.randint(20, 40),   # ранний сухостой
+                random.randint(20, 40)    # поздний сухостой
+            ]
+
+            for phase_id, duration in zip(phase_ids, phase_durations):
+                start_date = current_date
+                end_date = start_date + timedelta(days=duration)
+
+                cursor.execute(
+                    """
+                    INSERT INTO Lactation (Number, Start, "End", id_Cow, id_Lactation_phase)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    (
+                        lact_num,
+                        start_date,
+                        end_date,
+                        cow_id,
+                        phase_id
+                    )
+                )
+
+                total_records['Lactation'] += 1
+
+                # следующая фаза начинается после предыдущей
+                current_date = end_date
+
+            # небольшой перерыв между лактациями
+            current_date += timedelta(days=random.randint(30, 90))
+
+    conn.commit()
+    print(f"Добавлено {total_records['Lactation']} записей лактации")
+
+def create_feeding_plan():
+    cursor.execute("SELECT id_Diet FROM Diet")
+    diet_ids = [row[0] for row in cursor.fetchall()]
+
+    cursor.execute("SELECT id_Feeds FROM Feeds")
+    feed_ids = [row[0] for row in cursor.fetchall()]
+
+    cursor.execute("SELECT id_Day_times FROM Day_Times")
+    day_time_ids = [row[0] for row in cursor.fetchall()]
+
+    if not diet_ids or not feed_ids or not day_time_ids:
+        print("Пустые зависимости!")
+        return
+
+    for diet_id in diet_ids:
+
+        for day_time in day_time_ids:
+
+            meals_count = random.randint(2, 3)
+
+            for _ in range(meals_count):
+
+                cursor.execute(
+                    """
+                    INSERT INTO Feeding_plan (Feed_amount, id_Feeds, id_Diet, id_Day_times)
+                    VALUES (%s, %s, %s, %s)
+                    """,
+                    (
+                        round(random.uniform(0.5, 12.0), 3),
+                        random.choice(feed_ids),
+                        diet_id,
+                        day_time
+                    )
+                )
+
+                total_records['Feeding_plan'] += 1
+
+    conn.commit()
+    print(f"Добавлено {total_records['Feeding_plan']} планов кормления")
+
+## 4 УРОВЕНЬ: ПИТАНИЕ
+def create_nutrition():
+    # Получаем ID всех коров
+    cursor.execute("SELECT id_Cow FROM Cow")
+    cow_ids = [row[0] for row in cursor.fetchall()]
+
+    # Получаем ID всех существующих планов кормления
+    cursor.execute("SELECT id_Feeding_plan FROM Feeding_plan")
+    plan_ids = [row[0] for row in cursor.fetchall()]
+
+    if not cow_ids or not plan_ids:
+        print("Нет коров или планов кормления в базе данных!")
+        return
+
+    for cow_id in cow_ids:
+        # Задаем случайное количество планов кормления (рационов) для текущей коровы от 20 до 30
+        count_plans_for_cow = random.randint(20, 30)
+        
+        # Выбираем уникальные планы кормления для коровы.
+        # min() защищает код от ошибки, если вдруг всего планов в базе будет меньше 30
+        chosen_plans = random.sample(plan_ids, min(count_plans_for_cow, len(plan_ids)))
+
+        for plan_id in chosen_plans:
+            cursor.execute(
+                """
+                INSERT INTO Nutrition (id_Cow, id_Feeding_plan)
+                VALUES (%s, %s)
+                """,
+                (cow_id, plan_id)
+            )
+            total_records['Nutrition'] += 1
+
+    conn.commit()
+    print(f"Добавлено {total_records['Nutrition']} записей в таблицу Питание")
+
+create_cows() # коровы
+create_feeds() # корма
+create_diets() # рационы
+create_lactations() # лактации
+create_feeding_plan() # план кормления
+create_nutrition() # питание
+

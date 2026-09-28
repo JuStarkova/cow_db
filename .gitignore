@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+db_report_part2/build/
