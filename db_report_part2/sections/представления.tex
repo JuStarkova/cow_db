@@ -4,7 +4,7 @@
 \textbf{Формулировка задания на русском языке.}
 
 Создать представление, в котором необходимо для каждой коровы
-посчитать количество лактаций и количество рационов,
+подсчитать количество лактаций и количество рационов,
 по которым она питалась.
 
 Команда создания представления на языке SQL приведена в листинге \ref{lst:create_view}.
@@ -77,7 +77,7 @@ GROUP BY Cow.id_Cow;
 \subsection{Запрос 1}
 \textbf{Формулировка запроса 1 на русском языке.}
 
-Посчитать количество коров, у которых было больше 2 лактаций.
+Подсчитать количество коров, у которых было больше 2 лактаций.
 
 Код запроса на языке SQL представлен в листинге \ref{lst:запрос_1}.
 
@@ -130,7 +130,7 @@ GROUP BY Cow.id_Cow;
 \textbf{Формулировка запроса 2 на русском языке.}
 
 Для каждой коровы вывести возраст, количество лактаций, количество рационов
-и количество кормов по которым она питалась.
+и кормов по которым она питалась.
 
 Код запроса на языке SQL представлен в листинге \ref{lst:запрос_2}.
 
@@ -138,8 +138,8 @@ GROUP BY Cow.id_Cow;
     SELECT Cow.id_Cow, Cow.Age, Cow_Lactation_Diet_Count.lactation_count,
     Cow_Lactation_Diet_Count.diet_count, COUNT(DISTINCT Feeds.id_Feeds) AS feed_count
     FROM Cow_Lactation_Diet_Count
-    JOIN Cow ON Cow.id_cow = Cow_Lactation_Diet_Count.id_cow
-    LEFT JOIN Nutrition ON Nutrition.id_cow = Cow.id_cow
+    JOIN Cow ON Cow.id_Cow = Cow_Lactation_Diet_Count.id_Cow
+    LEFT JOIN Nutrition ON Nutrition.id_Cow = Cow.id_Cow
     LEFT JOIN Feeding_plan ON Feeding_plan.id_Feeding_plan = Nutrition.id_Feeding_plan
     LEFT JOIN Feeds ON Feeds.id_feeds = Feeding_plan.id_feeds
     GROUP BY Cow.id_Cow, Cow.Age, Cow_Lactation_Diet_Count.lactation_count, Cow_Lactation_Diet_Count.diet_count;

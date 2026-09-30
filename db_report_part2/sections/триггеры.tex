@@ -1,5 +1,4 @@
 \section{Триггеры}
-\subsection{Создание таблицы}
 \textbf{Формулировка задания.}
 
 Создать таблицу, в которой с помощью триггеров для каждой коровы
@@ -29,8 +28,8 @@ CREATE TABLE IF NOT EXISTS Cow_lactation_diet_count (
 \textbf{Текстовое объяснение последовательности выполнения команды заполнения таблицы.}
 
 Для заполнения таблицы \texttt{Cow\_lactation\_diet\_count}
-используется команда \texttt{INSERT INTO} в сочетании со считывающим выборку
-подзапросом \texttt{SELECT}.
+используется команда \texttt{INSERT INTO} в сочетании с подзапросом, считывающим выборку 
+\texttt{SELECT}.
 В подзапросе к таблице \texttt{Cow} последовательно присоединяются таблицы
 \texttt{Lactation, Nutrition, Feeding\_plan} и \texttt{Diet} с помощью
 левого внешнего соединения (\texttt{LEFT JOIN}).
@@ -54,7 +53,7 @@ GROUP BY Cow.id_Cow;
 \end{lstlisting}
 
 На рисунке \ref{fig:схема_бд_англ} представлена схема базы данных на английском языке
-с добавлением созданной таблицей \texttt{Cow\_lactation\_diet\_count} и указанием триггеров.
+с добавлением созданной таблицы \texttt{Cow\_lactation\_diet\_count} и указанием триггеров.
 
 \clearpage
 \newgeometry{margin=1cm}
@@ -268,7 +267,7 @@ CREATE TRIGGER Lactation_delete_trigger
 В листинге \ref{lst:Lactation_delete_trigger_function} приведена SQL-команда создания функции
 \\\texttt{Lactation\_delete\_trigger\_function}.
 Функция вызывается триггером \texttt{Lactation\_delete\_trigger} и выполняет
-перерасчет количества лактаций для соответсвующей коровы \texttt{OLD.id\_Cow},
+перерасчет количества лактаций для соответствующей коровы \texttt{OLD.id\_Cow},
 обновляя значение столбца \texttt{lactation\_count} таблицы \texttt{Cow\_lactation\_diet\_count}.
 
 \begin{lstlisting}[caption={Создание функции Lactation\_delete\_trigger\_function}, label={lst:Lactation_delete_trigger_function}]
@@ -286,7 +285,7 @@ $$ LANGUAGE plpgsql;
 
 В листинге \ref{lst:Lactation_update_trigger} представлена SQL-команда создания триггера,
 срабатывающего после обновления записи в таблице \texttt{Lactation}.
-Данная реализация не рассчитана на случай изменения id коровы.
+Данная реализация не рассчитана на случай изменения \texttt{id\_Cow} коровы.
 
 \begin{lstlisting}[caption={Создание триггера Lactation\_update\_trigger}, label={lst:Lactation_update_trigger}]
 CREATE TRIGGER Lactation_update_trigger
@@ -313,7 +312,37 @@ END;
 $$ LANGUAGE plpgsql;
 \end{lstlisting}
 
-\subsection{Демонстрация работы триггеров при изменении данных}
+\subsection{Демонстрация работы триггеров}
+
+В таблице \ref{tab:действия_триггеров} представлено описание изменений 
+таблицы \\\texttt{Cow\_lactation\_diet\_count} 
+посредством триггеров в зависимости от изменения данных в таблицах \texttt{Cow},
+\texttt{Nutrition}, \texttt{Lactation}.
+
+\begin{table}[h!]
+\centering
+\caption{Описание действий триггеров}
+\label{tab:действия_триггеров}
+\begin{tabular}{|c|p{0.85\textwidth}|}
+\hline
+\textnumero & {Действие} \\
+\hline
+1 & Добавление коровы в таблицу \texttt{Cow}. В таблице \texttt{Cow\_lactation\_diet\_count} создаётся запись с нулевыми значениями количества лактаций и рационов. \\
+\hline
+2 & Удаление коровы из таблицы \texttt{Cow}. Из таблицы \texttt{Cow\_lactation\_diet\_count} удаляется соответствующая запись. \\
+\hline
+3 & Добавление записи питания в таблицу \texttt{Nutrition}. Пересчитывается количество уникальных рационов для указанной коровы в таблице \texttt{Cow\_lactation\_diet\_count}. \\
+\hline
+4 & Удаление записи питания из таблицы \texttt{Nutrition}. Пересчитывается количество уникальных рационов для указанной коровы в таблице \texttt{Cow\_lactation\_diet\_count}. \\
+\hline
+5 & Изменение плана кормления в таблице \texttt{Nutrition}. Пересчитывается количество уникальных рационов для указанной коровы в таблице \texttt{Cow\_lactation\_diet\_count}. \\
+\hline
+6 & Добавление лактации в таблицу \texttt{Lactation}. Пересчитывается общее количество лактаций для указанной коровы в таблице \texttt{Cow\_lactation\_diet\_count}. \\
+\hline
+7 & Удаление лактации из таблицы \texttt{Lactation}. Пересчитывается общее количество лактаций для указанной коровы в таблице \texttt{Cow\_lactation\_diet\_count}. \\
+\hline
+\end{tabular}
+\end{table}
 
 На рисунке \ref{cow_insert_example} представлено появление новой записи
 в таблице \\\texttt{Cow\_lactation\_diet\_count} после добавления
@@ -360,3 +389,4 @@ $$ LANGUAGE plpgsql;
     \caption{Изменение данных при обновлении плана кормления в таблице Nutrition}
     \label{update_nutrition_example}
 \end{figure}
+
